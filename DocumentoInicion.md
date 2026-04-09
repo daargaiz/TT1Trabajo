@@ -16,4 +16,16 @@ Tipos de entidades:
 - Si ya hay un color en la casilla, prevalece el color que ya existía.
 
 Decisiones de tecnología:
-- Java
+- Framework: Spring Boot
+- Lenguaje: Java 17 (el equipo está familiarizado con java y ahorra tiempo de formación)
+- Tipo API: REST JSON
+- Build tool: Maven (por la gestión de dependencias que conoce el equipo)
+
+Tiempo accesible:
+- 7 semanas (3 horas por semana) \implies 63 horas
+- Hito 1: Encontrar con qué lo vamos a hacer (09/04/2026)
+- Hito 2: Crear un servicio (16/04/2026)
+- Hito 3: Desarrollar la aplicación
+- Hito 4: El servicio funcione en el servidor
+- Hito 5: El trabajo funcione en el servicio
+
