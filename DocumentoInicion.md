@@ -16,7 +16,7 @@ Tipos de entidades:
 - Si ya hay un color en la casilla, prevalece el color que ya existía.
 
 Decisiones de tecnología:
-- Framework: Spring Boot
+- Framework: Spring Boot, porque nos permite crear la API REST de forma rápida y ordenada. Nos ahorra mucha configuración y facilita exponer endpoints para que la web consuma el servicio.
 - Lenguaje: Java 17 (el equipo está familiarizado con java y ahorra tiempo de formación)
 - Tipo API: REST JSON
 - Build tool: Maven (por la gestión de dependencias que conoce el equipo)
@@ -29,3 +29,4 @@ Tiempo accesible:
 - Hito 4: El servicio funcione en el servidor
 - Hito 5: El trabajo funcione en el servicio
 
+Riesgos:
