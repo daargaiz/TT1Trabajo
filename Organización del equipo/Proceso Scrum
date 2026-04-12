@@ -1,0 +1,19 @@
+# Proceso Scrum
+
+## Herramientas
+- El proyecto se gestiona en un repositorio de GitHub.
+- Se utiliza un tablero Kanban para la gestión de tareas.
+
+## Iteraciones
+- El trabajo se organiza en iteraciones semanales. 
+- Cada iteración finaliza con una revisión del trabajo realizado. 
+
+## Roles
+- En cada iteración, cada miembro del equipo tendrá un rol asignado. 
+- Los roles rotarán cada iteración. 
+- Ningún miembro repetirá rol en iteraciones consecutivas. 
+
+## Gestión de tareas
+- Cada tarea estará representada por un issue.
+- Cada issue tendrá un responsable asignado.
+- Las decisiones tomadas deberán quedar documentadas.
