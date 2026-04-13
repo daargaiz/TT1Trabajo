@@ -1,9 +1,6 @@
 package com.ejemplo.proyecto.domain;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public class Tablero {
     private int altura;
@@ -13,27 +10,15 @@ public class Tablero {
     public Tablero(int altura, int ancho) {
         this.altura = altura;
         this.ancho = ancho;
-        this.entidades = new HashMap<>();
+        this.entidades = new ArrayList<>();  // fix del bug
     }
 
-    public int getAltura() {
-        return altura;
-    }
-    public int getAncho() {
-        return ancho;
-    }
-    public void setAltura(int altura) {
-        this.altura = altura;
-    }
-    public void setAncho(int ancho) {
-        this.ancho = ancho;
-    }
-    public Map<Posicion, Entidad> getEntidades() {
-        return this.entidades;
-    }
-    public void setEntidades(Map<Posicion, Entidad> entidades) {
-        this.entidades = entidades;
-    }
+    public int getAltura() { return altura; }
+    public int getAncho() { return ancho; }
+    public void setAltura(int altura) { this.altura = altura; }
+    public void setAncho(int ancho) { this.ancho = ancho; }
+    public List<Entidad> getEntidades() { return entidades; }
+    public void setEntidades(List<Entidad> entidades) { this.entidades = entidades; }
 
     @Override
     public boolean equals(Object obj) {
@@ -43,12 +28,8 @@ public class Tablero {
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(altura, ancho);
-    }
+    public int hashCode() { return Objects.hash(altura, ancho); }
 
     @Override
-    public String toString() {
-        return "Tablero(" + ancho + "x" + altura + ")";
-    }
+    public String toString() { return "Tablero(" + ancho + "x" + altura + ")"; }
 }
