@@ -2,5 +2,5 @@
 
 Participantes:
 Daniel Argaiz Garcia
-Juan Pulgar
+Juan Pulgar Hernaiz
 Víctor Esteban Chacobo
