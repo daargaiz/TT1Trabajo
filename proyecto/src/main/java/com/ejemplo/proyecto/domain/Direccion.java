@@ -1,5 +1,6 @@
 package com.ejemplo.proyecto.domain;
 
-public class EntidadMovil {
+public enum Direccion {
+    public
 
 }
