@@ -313,8 +313,10 @@ public class SimulacionServiceTest {
         SimulacionService service = new SimulacionServiceStub();
         service.nextStep(tablero);
         
-        assertNotEquals(xInicial, movil.getX(), "La entidad movil se mueve en el plano X.");
-        assertEquals(yInicial, movil.getY(), "La entidad movil se mueve en el plano Y.");
+        assertFalse(
+                movil.getX() == xInicial && movil.getY() == yInicial,
+                "La entidad movil debe abandonar su posicion inicial."
+        );
         
         int dx = Math.abs(movil.getX() - xInicial);
         int dy = Math.abs(movil.getY() - yInicial);

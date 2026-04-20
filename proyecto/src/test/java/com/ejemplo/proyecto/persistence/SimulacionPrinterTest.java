@@ -71,24 +71,24 @@ public class SimulacionPrinterTest {
     }
 
     // ─────────────────────────────────────────────────────────────────────────
-    // 3. Formato de cada línea de entidad: tiempo,y,x,tipo
+    // 3. Formato de cada línea de entidad: tiempo,y,x,color
     // ─────────────────────────────────────────────────────────────────────────
 
     @Test
-    @DisplayName("print: una EntidadQuieta produce una línea con formato tiempo,y,x,quieta")
+    @DisplayName("print: una EntidadQuieta produce una línea con formato tiempo,y,x,color")
     void testFormatoLineaEntidadQuieta() {
         Tablero tablero = new Tablero(10);
         tablero.getEntidades().add(new EntidadQuieta(0, 0));
 
         String resultado = printer.print(tablero);
-        String esperado = "10,10\n0,0,0,quieta";
+        String esperado = "10\n0,0,0,yellow";
 
         assertEquals(esperado, resultado.trim(),
                 "El formato de salida para EntidadQuieta no es el esperado.");
     }
 
     @Test
-    @DisplayName("print: una EntidadMovil produce una línea con formato tiempo,y,x,movil")
+    @DisplayName("print: una EntidadMovil produce una línea con formato tiempo,y,x,color")
     void testFormatoLineaEntidadMovil() {
         Tablero tablero = new Tablero(10);
         tablero.getEntidades().add(new EntidadMovil(3, 4));
@@ -98,12 +98,12 @@ public class SimulacionPrinterTest {
 
         assertEquals(2, lineas.length,
                 "Debe haber exactamente dos líneas: cabecera y la entidad.");
-        assertEquals("0,4,3,movil", lineas[1],
-                "El formato de salida para EntidadMovil no es el esperado (tiempo,y,x,movil).");
+        assertEquals("0,4,3,red", lineas[1],
+                "El formato de salida para EntidadMovil no es el esperado (tiempo,y,x,color).");
     }
 
     @Test
-    @DisplayName("print: una EntidadVirica produce una línea con formato tiempo,y,x,virica")
+    @DisplayName("print: una EntidadVirica produce una línea con formato tiempo,y,x,color")
     void testFormatoLineaEntidadVirica() {
         Tablero tablero = new Tablero(10);
         tablero.getEntidades().add(new EntidadVirica(7, 2));
@@ -113,8 +113,8 @@ public class SimulacionPrinterTest {
 
         assertEquals(2, lineas.length,
                 "Debe haber exactamente dos líneas: cabecera y la entidad.");
-        assertEquals("0,2,7,virica", lineas[1],
-                "El formato de salida para EntidadVirica no es el esperado (tiempo,y,x,virica).");
+        assertEquals("0,2,7,green", lineas[1],
+                "El formato de salida para EntidadVirica no es el esperado (tiempo,y,x,color).");
     }
 
     // ─────────────────────────────────────────────────────────────────────────
@@ -130,8 +130,8 @@ public class SimulacionPrinterTest {
         String resultado = printer.print(tablero);
         String lineaEntidad = resultado.trim().split("\n")[1];
 
-        // Formato esperado: tiempo,y,x,tipo → 0,7,3,quieta
-        assertEquals("0,7,3,quieta", lineaEntidad,
+        // Formato esperado: tiempo,y,x,color → 0,7,3,yellow
+        assertEquals("0,7,3,yellow", lineaEntidad,
                 "La coordenada y debe aparecer antes que x en la línea de salida.");
     }
 
@@ -144,7 +144,7 @@ public class SimulacionPrinterTest {
         String resultado = printer.print(tablero);
         String lineaEntidad = resultado.trim().split("\n")[1];
 
-        assertEquals("0,9,9,quieta", lineaEntidad,
+        assertEquals("0,9,9,yellow", lineaEntidad,
                 "Las coordenadas en la esquina máxima deben escribirse correctamente.");
     }
 
@@ -157,7 +157,7 @@ public class SimulacionPrinterTest {
         String resultado = printer.print(tablero);
         String lineaEntidad = resultado.trim().split("\n")[1];
 
-        assertEquals("0,0,0,movil", lineaEntidad,
+        assertEquals("0,0,0,red", lineaEntidad,
                 "Las coordenadas en el origen deben escribirse correctamente.");
     }
 
@@ -181,7 +181,7 @@ public class SimulacionPrinterTest {
     }
 
     @Test
-    @DisplayName("print: con tres entidades distintas aparecen los tres tipos en la salida")
+    @DisplayName("print: con tres entidades distintas aparecen los tres colores en la salida")
     void testTresEntidadesTiposDistintos() {
         Tablero tablero = new Tablero(10);
         tablero.getEntidades().add(new EntidadQuieta(0, 0));
@@ -190,12 +190,12 @@ public class SimulacionPrinterTest {
 
         String resultado = printer.print(tablero);
 
-        assertTrue(resultado.contains("quieta"),
-                "La salida debe contener la etiqueta 'quieta'.");
-        assertTrue(resultado.contains("movil"),
-                "La salida debe contener la etiqueta 'movil'.");
-        assertTrue(resultado.contains("virica"),
-                "La salida debe contener la etiqueta 'virica'.");
+        assertTrue(resultado.contains("yellow"),
+                "La salida debe contener el color 'yellow'.");
+        assertTrue(resultado.contains("red"),
+                "La salida debe contener el color 'red'.");
+        assertTrue(resultado.contains("green"),
+                "La salida debe contener el color 'green'.");
     }
 
     @Test
@@ -259,7 +259,7 @@ public class SimulacionPrinterTest {
         SimulacionPrinter printer = new SimulacionPrinterStub();
         String resultado = printer.print(tablero);
 
-        String esperado = "10\n0,0,0,quieta";
+        String esperado = "10\n0,0,0,yellow";
         assertEquals(esperado, resultado.trim(), "El formato de salida no es el esperado");
     }
 }

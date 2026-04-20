@@ -1,15 +1,19 @@
 package com.ejemplo.proyecto.persistence;
 
-import com.ejemplo.proyecto.domain.*;
+import com.ejemplo.proyecto.Logica.Service;
+import com.ejemplo.proyecto.domain.Simulacion;
+import com.ejemplo.proyecto.domain.Tablero;
 
 public class SimulacionServiceStub implements SimulacionService{
+    private final Service delegate = new Service();
+
     @Override
     public void nextStep(Tablero tablero) {
-        
+        this.delegate.nextStep(tablero);
     }
 
     @Override
-    public void ejecutarSimulacion(Tablero tablero, int steps) {
-        
+    public Simulacion ejecutarSimulacion(Tablero tablero, int steps) {
+        return this.delegate.ejecutarSimulacion(tablero, steps);
     }
 }
