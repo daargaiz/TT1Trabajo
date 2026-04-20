@@ -3,20 +3,16 @@ package com.ejemplo.proyecto.domain;
 import java.util.*;
 
 public class Tablero {
-    private int altura;
-    private int ancho;
+    private int lado;
     private List<Entidad> entidades;
 
-    public Tablero(int altura, int ancho) {
-        this.altura = altura;
-        this.ancho = ancho;
+    public Tablero(int lado) {
+        this.lado = lado;
         this.entidades = new ArrayList<>();  // fix del bug
     }
 
-    public int getAltura() { return altura; }
-    public int getAncho() { return ancho; }
-    public void setAltura(int altura) { this.altura = altura; }
-    public void setAncho(int ancho) { this.ancho = ancho; }
+    public int getLado() { return lado; }
+    public void setLado(int lado) { this.lado = lado; }
     public List<Entidad> getEntidades() { return entidades; }
     public void setEntidades(List<Entidad> entidades) { this.entidades = entidades; }
 
@@ -24,12 +20,12 @@ public class Tablero {
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (!(obj instanceof Tablero t)) return false;
-        return this.ancho == t.ancho && this.altura == t.altura;
+        return this.lado == t.lado;
     }
 
     @Override
-    public int hashCode() { return Objects.hash(altura, ancho); }
+    public int hashCode() { return Objects.hash(lado); }
 
     @Override
-    public String toString() { return "Tablero(" + ancho + "x" + altura + ")"; }
+    public String toString() { return "Tablero(" + lado + "x" + lado + ")"; }
 }
