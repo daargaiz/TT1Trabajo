@@ -1,4 +1,4 @@
-package com.ejemplo.proyecto.persistence;
+package com.ejemplo.proyecto.businesslogic.actions;
 
 import com.ejemplo.proyecto.domain.Tablero;
 

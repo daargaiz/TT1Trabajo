@@ -44,44 +44,6 @@ public abstract class Entidad {
     public void setY(int y) { this.ordenada = y; }
 
     /**
-     * Obtiene la posición actual de la entidad.
-     * @return Posición inmutable con las coordenadas actuales.
-     */
-    public Posicion getPosicion() {
-        return new Posicion(this.abscisa, this.ordenada);
-    }
-
-    /**
-     * Desplaza la entidad a una nueva posición.
-     * @param posicion Nueva posición dentro del tablero.
-     */
-    public void moverA(Posicion posicion) {
-        this.abscisa = posicion.x();
-        this.ordenada = posicion.y();
-    }
-
-    /**
-     * Construye el estado serializable de la entidad para un instante concreto.
-     * @param tiempo Instante de la simulación.
-     * @return Estado exportable de la entidad.
-     */
-    public EstadoEntidad registrarEstado(int tiempo) {
-        return new EstadoEntidad(tiempo, this.abscisa, this.ordenada, getColor());
-    }
-
-    /**
-     * Etiqueta funcional de la entidad dentro del dominio.
-     * @return Tipo lógico de la entidad.
-     */
-    public abstract String getTipo();
-
-    /**
-     * Color con el que se exporta la entidad al cliente.
-     * @return Color textual compatible con CSS.
-     */
-    public abstract String getColor();
-
-    /**
      * Compara esta entidad con otro objeto para determinar si son equivalentes; es decir, es una entidad con las mismas coordenadas.
      * @param o Objeto con el que comparar.
      * @return true si los objetos son iguales, false en caso contrario.

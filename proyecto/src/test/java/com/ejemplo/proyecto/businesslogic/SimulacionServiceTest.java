@@ -1,5 +1,6 @@
-package com.ejemplo.proyecto.persistence;
+package com.ejemplo.proyecto.businesslogic;
 
+import com.ejemplo.proyecto.businesslogic.actions.ISimulacionComportamiento;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,7 +16,7 @@ public class SimulacionServiceTest {
     private static final int ALTO   = 10;
 
     private Tablero tablero;
-    private SimulacionService service;
+    private ISimulacionComportamiento service;
 
     @BeforeEach
     void setUp() {
@@ -294,7 +295,7 @@ public class SimulacionServiceTest {
         EntidadQuieta quieta = new EntidadQuieta(xInicial, yInicial);
         tablero.getEntidades().add(quieta);
         
-        SimulacionService service = new SimulacionServiceStub();
+        ISimulacionComportamiento service = new SimulacionServiceStub();
         service.nextStep(tablero);
         
         assertEquals(xInicial, quieta.getX(), "La entidad quieta no se mueve en el plano X.");
@@ -310,7 +311,7 @@ public class SimulacionServiceTest {
         EntidadMovil movil = new EntidadMovil(xInicial, yInicial);
         tablero.getEntidades().add(movil);
         
-        SimulacionService service = new SimulacionServiceStub();
+        ISimulacionComportamiento service = new SimulacionServiceStub();
         service.nextStep(tablero);
         
         assertFalse(
@@ -332,7 +333,7 @@ public class SimulacionServiceTest {
         EntidadVirica virica = new EntidadVirica(xInicial, yInicial);
         tablero.getEntidades().add(virica);
         
-        SimulacionService service = new SimulacionServiceStub();
+        ISimulacionComportamiento service = new SimulacionServiceStub();
         service.nextStep(tablero);
         
         assertEquals(xInicial, virica.getX(), "La entidad quieta no se mueve en el plano X.");

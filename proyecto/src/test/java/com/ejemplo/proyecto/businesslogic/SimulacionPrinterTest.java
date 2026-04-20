@@ -1,5 +1,6 @@
-package com.ejemplo.proyecto.persistence;
+package com.ejemplo.proyecto.businesslogic;
 
+import com.ejemplo.proyecto.businesslogic.printer.SimulacionPrinter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

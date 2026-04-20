@@ -1,9 +1,8 @@
-package com.ejemplo.proyecto.persistence;
+package com.ejemplo.proyecto.businesslogic.actions;
 
 import com.ejemplo.proyecto.domain.Simulacion;
 import com.ejemplo.proyecto.domain.Tablero;
 
-public interface SimulacionService {
-    void nextStep(Tablero tablero);
+public interface ISimulacionComportamiento {
     Simulacion ejecutarSimulacion(Tablero tablero, int steps);
 }

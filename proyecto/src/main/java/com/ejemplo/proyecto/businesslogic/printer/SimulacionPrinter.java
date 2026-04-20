@@ -1,4 +1,4 @@
-package com.ejemplo.proyecto.persistence;
+package com.ejemplo.proyecto.businesslogic.printer;
 
 import com.ejemplo.proyecto.domain.Tablero;
 
