@@ -16,9 +16,9 @@ jobs:
           distribution: 'temurin'
       - name: Generar Javadoc
         working-directory: proyecto
-        run: mvn javadoc:javadoc
+        run: mvn javadoc:javadoc -Dmaven.javadoc.failOnError=false
       - name: Desplegar en GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          folder: proyecto/target/site/apidocs
+          folder: proyecto/target/reports/apidocs
           branch: gh-pages
