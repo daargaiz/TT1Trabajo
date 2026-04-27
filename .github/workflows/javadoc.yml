@@ -1,0 +1,28 @@
+name: Publicar Javadoc
+
+on:
+  push:
+    branches:
+      - stable
+
+jobs:
+  javadoc:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout del código
+        uses: actions/checkout@v4
+
+      - name: Configurar Java
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Generar Javadoc
+        run: mvn javadoc:javadoc
+
+      - name: Desplegar en GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: target/reports/apidocs
+          branch: gh-pages
