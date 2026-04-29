@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"com.ejemplo.proyecto"},{"l":"com.ejemplo.proyecto.businesslogic.actions"},{"l":"com.ejemplo.proyecto.businesslogic.printer"},{"l":"com.ejemplo.proyecto.controller"},{"l":"com.ejemplo.proyecto.domain"},{"l":"com.ejemplo.proyecto.Logica"},{"l":"com.ejemplo.proyecto.persistence"}];updateSearchResults();
