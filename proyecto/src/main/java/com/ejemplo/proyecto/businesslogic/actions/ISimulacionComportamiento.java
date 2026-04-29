@@ -1,5 +1,6 @@
 package com.ejemplo.proyecto.businesslogic.actions;
 
+import com.ejemplo.proyecto.domain.Simulacion;
 import com.ejemplo.proyecto.domain.Tablero;
 /**
  * Contrato para la ejecución de una simulación completa sobre un tablero.
@@ -13,6 +14,8 @@ import com.ejemplo.proyecto.domain.Tablero;
  * @see Tablero
  */
 public interface ISimulacionComportamiento {
+    void nextStep(Tablero tablero);
+
     /**
      * Ejecuta la simulación sobre el tablero durante el número de pasos indicado.
      *

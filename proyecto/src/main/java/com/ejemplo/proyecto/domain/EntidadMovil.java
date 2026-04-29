@@ -14,4 +14,14 @@ public class EntidadMovil extends Entidad {
 	public EntidadMovil(int x, int y) {
         super(x, y);
     }
+
+    @Override
+    public String getTipo() {
+        return "movil";
+    }
+
+    @Override
+    public String getColor() {
+        return "red";
+    }
 }

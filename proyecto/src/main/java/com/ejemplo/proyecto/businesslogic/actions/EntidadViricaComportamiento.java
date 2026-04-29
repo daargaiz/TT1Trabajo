@@ -1,7 +1,10 @@
 package com.ejemplo.proyecto.businesslogic.actions;
 
 import com.ejemplo.proyecto.domain.Entidad;
+import com.ejemplo.proyecto.domain.EntidadVirica;
+import com.ejemplo.proyecto.domain.Posicion;
 
+import java.util.ArrayList;
 import java.util.List;
 /**
  * Implementación del comportamiento de una entidad vírica en el tablero.
@@ -28,7 +31,25 @@ public class EntidadViricaComportamiento implements IEntidadViricaComportamiento
      */
     @Override
     public List<Entidad> moverse(Entidad entidad, int dimensionTablero) {
-        throw new UnsupportedOperationException("Clase aún no implementada.");
+        if (entidad == null) {
+            throw new NullPointerException("La entidad no puede ser nula");
+        }
+        if (!(entidad instanceof EntidadVirica virica)) {
+            return null;
+        }
+        if (!estaDentro(virica.getX(), virica.getY(), dimensionTablero)) {
+            return null;
+        }
+
+        List<Entidad> resultado = new ArrayList<>();
+        resultado.add(virica);
+
+        Posicion copia = buscarDestinoAdyacente(virica.getX(), virica.getY(), dimensionTablero);
+        if (copia != null) {
+            resultado.add(new EntidadVirica(copia.x(), copia.y(), virica.getProbabilidadExpansion()));
+        }
+
+        return resultado;
     }
     /**
      * Devuelve el color asociado a esta entidad para su representación visual.
@@ -38,6 +59,26 @@ public class EntidadViricaComportamiento implements IEntidadViricaComportamiento
      */
     @Override
     public String getColor() {
-        throw new UnsupportedOperationException("Clase aún no implementada.");
+        return "green";
+    }
+
+    private Posicion buscarDestinoAdyacente(int x, int y, int dimensionTablero) {
+        if (estaDentro(x + 1, y, dimensionTablero)) {
+            return new Posicion(x + 1, y);
+        }
+        if (estaDentro(x, y + 1, dimensionTablero)) {
+            return new Posicion(x, y + 1);
+        }
+        if (estaDentro(x - 1, y, dimensionTablero)) {
+            return new Posicion(x - 1, y);
+        }
+        if (estaDentro(x, y - 1, dimensionTablero)) {
+            return new Posicion(x, y - 1);
+        }
+        return null;
+    }
+
+    private boolean estaDentro(int x, int y, int dimensionTablero) {
+        return x >= 0 && y >= 0 && x < dimensionTablero && y < dimensionTablero;
     }
 }

@@ -14,4 +14,14 @@ public class EntidadQuieta extends Entidad {
 	public EntidadQuieta(int x, int y) {
         super(x, y);
     }
+
+    @Override
+    public String getTipo() {
+        return "quieta";
+    }
+
+    @Override
+    public String getColor() {
+        return "yellow";
+    }
 }

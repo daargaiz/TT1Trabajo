@@ -25,7 +25,14 @@ public class EntidadQuietaComportamiento implements IEntidadQuietaComportamiento
      */
     @Override
     public Entidad moverse(Entidad entidad, int dimensionTablero) {
-        throw new UnsupportedOperationException("Clase aún no implementada.");
+        if (entidad == null) {
+            throw new NullPointerException("La entidad no puede ser nula");
+        }
+        if (entidad.getX() < 0 || entidad.getY() < 0
+                || entidad.getX() >= dimensionTablero || entidad.getY() >= dimensionTablero) {
+            return null;
+        }
+        return entidad;
     }
     /**
      * Devuelve el color asociado a esta entidad para su representación visual.
@@ -35,6 +42,6 @@ public class EntidadQuietaComportamiento implements IEntidadQuietaComportamiento
      */
     @Override
     public String getColor() {
-        throw new UnsupportedOperationException("Clase aún no implementada.");
+        return "yellow";
     }
 }

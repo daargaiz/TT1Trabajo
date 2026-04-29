@@ -1,7 +1,10 @@
 package com.ejemplo.proyecto.businesslogic.actions;
 
-import com.ejemplo.proyecto.domain.Entidad;
 import com.ejemplo.proyecto.domain.EntidadMovil;
+import com.ejemplo.proyecto.domain.Posicion;
+
+import java.util.ArrayList;
+import java.util.List;
 /**
  * Implementación base del comportamiento de una entidad móvil en el tablero.
  *
@@ -21,8 +24,29 @@ public class EntidadMovilComportamiento implements IEntidadMovilComportamiento {
      * @throws UnsupportedOperationException si la subclase no ha implementado este método
      */
     @Override
-    public EntidadMovil moverse(Entidad entidad, int dimensionTablero) {
-        throw new UnsupportedOperationException("Clase aún no implementada.");
+    public EntidadMovil moverse(com.ejemplo.proyecto.domain.Entidad entidad, int dimensionTablero) {
+        if (entidad == null) {
+            throw new NullPointerException("La entidad no puede ser nula");
+        }
+        if (!(entidad instanceof EntidadMovil movil)) {
+            return null;
+        }
+        if (!estaDentro(movil.getX(), movil.getY(), dimensionTablero)) {
+            return null;
+        }
+
+        List<Posicion> candidatas = new ArrayList<>();
+        agregarSiDentro(candidatas, movil.getX() + 1, movil.getY(), dimensionTablero);
+        agregarSiDentro(candidatas, movil.getX(), movil.getY() + 1, dimensionTablero);
+        agregarSiDentro(candidatas, movil.getX() - 1, movil.getY(), dimensionTablero);
+        agregarSiDentro(candidatas, movil.getX(), movil.getY() - 1, dimensionTablero);
+
+        if (candidatas.isEmpty()) {
+            return null;
+        }
+
+        Posicion destino = candidatas.get(0);
+        return new EntidadMovil(destino.x(), destino.y());
     }
     /**
      * Devuelve el color asociado a esta entidad para su representación visual.
@@ -32,6 +56,16 @@ public class EntidadMovilComportamiento implements IEntidadMovilComportamiento {
      */
     @Override
     public String getColor() {
-        throw new UnsupportedOperationException("Clase aún no implementada.");
+        return "red";
+    }
+
+    private void agregarSiDentro(List<Posicion> candidatas, int x, int y, int dimensionTablero) {
+        if (estaDentro(x, y, dimensionTablero)) {
+            candidatas.add(new Posicion(x, y));
+        }
+    }
+
+    private boolean estaDentro(int x, int y, int dimensionTablero) {
+        return x >= 0 && y >= 0 && x < dimensionTablero && y < dimensionTablero;
     }
 }
