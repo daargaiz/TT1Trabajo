@@ -13,4 +13,8 @@ public interface SolicitudSimulacionService {
     );
 
     Optional<ProcesoSimulacion> consultar(String nombreUsuario, int token);
+
+    List<Integer> listarTokensUsuario(String nombreUsuario);
+
+    boolean comprobarSolicitud(String nombreUsuario, int token);
 }

@@ -12,7 +12,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -35,6 +37,7 @@ class CompatibilidadServicioControllerTest {
                 new SolicitudController(service),
                 new ResultadosController(service),
                 new EmailController()
+        ).setControllerAdvice(new ApiExceptionHandler()
         ).build();
     }
 
@@ -43,29 +46,31 @@ class CompatibilidadServicioControllerTest {
         String solicitudResponse = this.mockMvc.perform(post("/Solicitud/Solicitar")
                         .queryParam("nombreUsuario", "dani")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("""
+                .content("""
                                 {
                                   "nombreEntidades": ["Prueba1", "Prueba2", "Prueba3"],
                                   "cantidadesIniciales": [1, 2, 1]
                                 }
                                 """))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andReturn()
                 .getResponse()
                 .getContentAsString();
 
         assertTrue(solicitudResponse.contains("\"done\":true"));
         assertTrue(solicitudResponse.contains("\"tokenSolicitud\":1000"));
+        assertTrue(solicitudResponse.contains("\"data\":true"));
 
         String resultadosResponse = this.mockMvc.perform(post("/Resultados")
                         .queryParam("nombreUsuario", "dani")
                         .queryParam("tok", "1000"))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andReturn()
                 .getResponse()
                 .getContentAsString();
 
         assertTrue(resultadosResponse.contains("\"done\":true"));
+        assertTrue(resultadosResponse.contains("\"tokenSolicitud\":1000"));
         assertTrue(resultadosResponse.contains("\\n"));
         assertTrue(resultadosResponse.contains("yellow"));
         assertTrue(resultadosResponse.contains("red"));
@@ -77,12 +82,12 @@ class CompatibilidadServicioControllerTest {
         String emailResponse = this.mockMvc.perform(post("/Email")
                         .queryParam("emailAddress", "dani@example.com")
                         .queryParam("message", "hola"))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andReturn()
                 .getResponse()
                 .getContentAsString();
 
-        assertTrue(emailResponse.contains("accepted"));
+        assertTrue(emailResponse.contains("\"done\":true"));
     }
 
     @Test
@@ -96,13 +101,12 @@ class CompatibilidadServicioControllerTest {
                                   "cantidadesIniciales": [1]
                                 }
                                 """))
-                .andExpect(status().isOk())
+                .andExpect(status().isBadRequest())
                 .andReturn()
                 .getResponse()
                 .getContentAsString();
 
-        assertTrue(solicitudResponse.contains("\"done\":false"));
-        assertTrue(solicitudResponse.contains("\"tokenSolicitud\":-1"));
+        assertTrue(solicitudResponse.contains("Bad Request"));
     }
 
     @Test
@@ -110,11 +114,54 @@ class CompatibilidadServicioControllerTest {
         String resultadosResponse = this.mockMvc.perform(post("/Resultados")
                         .queryParam("nombreUsuario", "dani")
                         .queryParam("tok", "9999"))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andReturn()
                 .getResponse()
                 .getContentAsString();
 
         assertTrue(resultadosResponse.contains("\"done\":false"));
+        assertTrue(resultadosResponse.contains("\"tokenSolicitud\":9999"));
+    }
+
+    @Test
+    void permiteListarYComprobarSolicitudesDeUnUsuario() throws Exception {
+        this.mockMvc.perform(post("/Solicitud/Solicitar")
+                        .queryParam("nombreUsuario", "dani")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                  "nombreEntidades": ["Prueba1"],
+                                  "cantidadesIniciales": [1]
+                                }
+                                """))
+                .andExpect(status().isCreated());
+        this.mockMvc.perform(post("/Solicitud/Solicitar")
+                        .queryParam("nombreUsuario", "dani")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                  "nombreEntidades": ["Prueba2"],
+                                  "cantidadesIniciales": [1]
+                                }
+                                """))
+                .andExpect(status().isCreated());
+
+        String tokens = this.mockMvc.perform(get("/Solicitud/GetSolicitudesUsuario")
+                        .queryParam("nombreUsuario", "dani"))
+                .andExpect(status().isCreated())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        String comprobacion = this.mockMvc.perform(get("/Solicitud/ComprobarSolicitud")
+                        .queryParam("nombreUsuario", "dani")
+                        .queryParam("tok", "1000"))
+                .andExpect(status().isCreated())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        assertEquals("[1000,1001]", tokens);
+        assertEquals("[1000]", comprobacion);
     }
 }

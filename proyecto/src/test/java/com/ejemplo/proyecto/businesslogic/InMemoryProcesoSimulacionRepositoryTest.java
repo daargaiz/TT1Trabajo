@@ -56,6 +56,16 @@ class InMemoryProcesoSimulacionRepositoryTest {
         assertEquals("12\n0,0,0,red", recuperado.getResultadoFormateado());
     }
 
+    @Test
+    void listaLosTokensDeUnUsuarioOrdenados() {
+        InMemoryProcesoSimulacionRepository repository = new InMemoryProcesoSimulacionRepository();
+        repository.guardar(crearProceso(1002, "dani"));
+        repository.guardar(crearProceso(1000, "Dani"));
+        repository.guardar(crearProceso(1001, "otro"));
+
+        assertEquals(List.of(1000, 1002), repository.buscarTokensPorUsuario("dani"));
+    }
+
     private ProcesoSimulacion crearProceso(int token, String usuario) {
         SolicitudSimulacion solicitud = new SolicitudSimulacion(
                 token,

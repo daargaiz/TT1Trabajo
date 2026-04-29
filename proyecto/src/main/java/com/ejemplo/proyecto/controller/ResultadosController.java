@@ -2,7 +2,9 @@ package com.ejemplo.proyecto.controller;
 
 import com.ejemplo.proyecto.domain.ProcesoSimulacion;
 import com.ejemplo.proyecto.persistence.SolicitudSimulacionService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,22 +20,23 @@ public class ResultadosController {
     }
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResultsResponse consultar(
+    public ResponseEntity<ResultsResponse> consultar(
             @RequestParam String nombreUsuario,
             @RequestParam("tok") int token
     ) {
-        return this.solicitudSimulacionService.consultar(nombreUsuario, token)
-                .map(this::toResponse)
-                .orElseGet(() -> new ResultsResponse(false, ""));
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(this.solicitudSimulacionService.consultar(nombreUsuario, token)
+                        .map(this::toResponse)
+                        .orElseGet(() -> new ResultsResponse(false, token, "Solicitud no encontrada", null)));
     }
 
     private ResultsResponse toResponse(ProcesoSimulacion proceso) {
         if (!proceso.isDone()) {
-            return new ResultsResponse(false, "");
+            return new ResultsResponse(false, proceso.getSolicitud().getToken(), "Solicitud pendiente", null);
         }
-        return new ResultsResponse(true, proceso.getResultadoFormateado());
+        return new ResultsResponse(true, proceso.getSolicitud().getToken(), null, proceso.getResultadoFormateado());
     }
 
-    public record ResultsResponse(boolean done, String data) {
+    public record ResultsResponse(boolean done, int tokenSolicitud, String errorMessage, String data) {
     }
 }

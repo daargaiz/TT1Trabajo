@@ -53,6 +53,7 @@ public class ServicioSolicitudesSimulacion implements SolicitudSimulacionService
             List<String> nombresEntidades,
             List<Integer> cantidadesIniciales
     ) {
+        validarNombreUsuario(nombreUsuario);
         List<EspecificacionEntidad> especificaciones = normalizarSolicitud(nombresEntidades, cantidadesIniciales);
         int token = this.tokenService.generarToken();
         SolicitudSimulacion solicitud = new SolicitudSimulacion(
@@ -76,7 +77,28 @@ public class ServicioSolicitudesSimulacion implements SolicitudSimulacionService
 
     @Override
     public Optional<ProcesoSimulacion> consultar(String nombreUsuario, int token) {
+        validarNombreUsuario(nombreUsuario);
+        if (token < 0) {
+            throw new IllegalArgumentException("El token no puede ser negativo");
+        }
         return this.repository.buscarPorUsuarioYToken(nombreUsuario, token);
+    }
+
+    @Override
+    public List<Integer> listarTokensUsuario(String nombreUsuario) {
+        validarNombreUsuario(nombreUsuario);
+        return this.repository.buscarTokensPorUsuario(nombreUsuario);
+    }
+
+    @Override
+    public boolean comprobarSolicitud(String nombreUsuario, int token) {
+        validarNombreUsuario(nombreUsuario);
+        if (token < 0) {
+            throw new IllegalArgumentException("El token no puede ser negativo");
+        }
+        return consultar(nombreUsuario, token)
+                .map(ProcesoSimulacion::isDone)
+                .orElse(false);
     }
 
     private List<EspecificacionEntidad> normalizarSolicitud(
@@ -117,5 +139,11 @@ public class ServicioSolicitudesSimulacion implements SolicitudSimulacionService
                 .forEach(entry -> especificaciones.add(new EspecificacionEntidad(entry.getKey(), entry.getValue())));
 
         return especificaciones;
+    }
+
+    private void validarNombreUsuario(String nombreUsuario) {
+        if (nombreUsuario == null || nombreUsuario.isBlank()) {
+            throw new IllegalArgumentException("El nombre de usuario es obligatorio");
+        }
     }
 }

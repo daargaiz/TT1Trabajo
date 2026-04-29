@@ -114,4 +114,20 @@ class SolicitudSimulacionServiceTest {
                 List.of(0)
         ));
     }
+
+    @Test
+    void listaLosTokensDelUsuario() {
+        service.solicitar("dani", List.of("quieta"), List.of(1));
+        service.solicitar("dani", List.of("movil"), List.of(1));
+
+        assertEquals(List.of(1000, 1001), service.listarTokensUsuario("dani"));
+    }
+
+    @Test
+    void compruebaSiUnaSolicitudExisteYEstaLista() {
+        ProcesoSimulacion proceso = service.solicitar("dani", List.of("quieta"), List.of(1));
+
+        assertTrue(service.comprobarSolicitud("dani", proceso.getSolicitud().getToken()));
+        assertFalse(service.comprobarSolicitud("dani", 9999));
+    }
 }
