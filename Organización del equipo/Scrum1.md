@@ -22,3 +22,8 @@ Desarrollar tests para las clases del modelo de dominio y las primeras clases de
 ### 4. Definir la estructura inicial de la simulación
 Preparar la base lógica para conectar el tablero con las entidades y la futura ejecución de la simulación.
 
+## Acta 
+
+- Daniel: Crea un proyecto paralelo con un "Hello World".
+- Juan: Se forma con el trabajo individual. 
+- Víctor: Desarrolla el modelo de dominio.
