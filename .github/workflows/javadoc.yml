@@ -1,19 +1,26 @@
-name: Publicar Javadoc
+name: Publicar Javadoc e Informe Sonar
+
 on:
   push:
     branches:
       - main
+
 concurrency:
   group: "pages"
   cancel-in-progress: false
+
 jobs:
   build-docs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
+      pages: write
+      id-token: write
     steps:
       - name: Checkout del código
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Configurar Java
         uses: actions/setup-java@v4
@@ -27,9 +34,12 @@ jobs:
           path: ~/.m2
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
 
-      - name: Build del proyecto
+      - name: Build, Test y Analizar con Sonar
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         working-directory: proyecto
-        run: mvn package -DskipTests
+        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=daargaiz_TT1Trabajo
 
       - name: Generar Javadoc
         working-directory: proyecto
@@ -38,7 +48,7 @@ jobs:
       - name: Subir artefacto
         uses: actions/upload-pages-artifact@v3
         with:
-          path: proyecto/target/reports/apidocs
+          path: proyecto/target/site/apidocs
 
   deploy:
     needs: build-docs
