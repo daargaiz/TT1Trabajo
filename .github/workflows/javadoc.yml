@@ -34,16 +34,16 @@ jobs:
           path: ~/.m2
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
 
+      - name: Generar Javadoc
+        working-directory: proyecto
+        run: mvn javadoc:javadoc
+        
       - name: Build, Test y Analizar con Sonar
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         working-directory: proyecto
-        run: mvn -B verify javadoc:javadoc org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=TT1Trabajo -Dsonar.organization=daargaiz
-
-      - name: Generar Javadoc
-        working-directory: proyecto
-        run: mvn javadoc:javadoc -Dmaven.javadoc.failOnError=false
+        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=TT1Trabajo -Dsonar.organization=daargaiz
 
       - name: Subir artefacto
         uses: actions/upload-pages-artifact@v3
