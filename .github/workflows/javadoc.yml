@@ -3,24 +3,53 @@ on:
   push:
     branches:
       - main
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
 jobs:
-  javadoc:
+  build-docs:
     runs-on: ubuntu-latest
     permissions:
-      contents: write
+      contents: read
     steps:
       - name: Checkout del código
         uses: actions/checkout@v4
+
       - name: Configurar Java
         uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
+
+      - name: Caché de dependencias Maven
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+
+      - name: Build del proyecto
+        working-directory: proyecto
+        run: mvn package -DskipTests
+
       - name: Generar Javadoc
         working-directory: proyecto
         run: mvn javadoc:javadoc -Dmaven.javadoc.failOnError=false
-      - name: Desplegar en GitHub Pages
-        uses: JamesIves/github-pages-deploy-action@v4
+
+      - name: Subir artefacto
+        uses: actions/upload-pages-artifact@v3
         with:
-          folder: proyecto/target/reports/apidocs
-          branch: gh-pages
+          path: proyecto/target/reports/apidocs
+
+  deploy:
+    needs: build-docs
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Desplegar en GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
