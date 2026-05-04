@@ -6,13 +6,11 @@ on:
 concurrency:
   group: "pages"
   cancel-in-progress: false
-permissions:
-  contents: read
-  pages: write
-  id-token: write
 jobs:
   build-docs:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: Checkout del código
         uses: actions/checkout@v4
@@ -45,6 +43,9 @@ jobs:
   deploy:
     needs: build-docs
     runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
