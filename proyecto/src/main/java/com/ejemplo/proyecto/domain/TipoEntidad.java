@@ -8,7 +8,7 @@ import java.util.function.BiFunction;
 public enum TipoEntidad {
     QUIETA("quieta", List.of("quieta", "prueba1"), EntidadQuieta::new),
     MOVIL("movil", List.of("movil", "prueba2"), EntidadMovil::new),
-    VIRICA("virica", List.of("virica", "prueba3"), (x, y) -> new EntidadVirica(x, y, 1.0d));
+    VIRICA("virica", List.of("virica", "prueba3"), EntidadVirica::new);
 
     private final String nombreExterno;
     private final List<String> alias;

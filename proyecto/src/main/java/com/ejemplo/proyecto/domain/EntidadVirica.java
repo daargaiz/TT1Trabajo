@@ -6,14 +6,16 @@ package com.ejemplo.proyecto.domain;
 */
 public class EntidadVirica extends Entidad {
     private double probabilidadExpansion;
+    private static final double PROBABILIDAD_EXPANSION_DEFECTO = 0.25d;
     
 	/**
      * Construye una nueva EntidadVirica en las coordenadas especificadas.
+     * La entidad se crea con una probabilidad de expansión por defecto.
      * @param x Posición inicial en el eje de abscisas.
      * @param y Posición inicial en el eje de ordenadas.
      */
 	public EntidadVirica(int x, int y) {
-        this(x, y, 1.0d);
+        this(x, y, PROBABILIDAD_EXPANSION_DEFECTO);
     }
 
     public EntidadVirica(int x, int y, double probabilidadExpansion) {

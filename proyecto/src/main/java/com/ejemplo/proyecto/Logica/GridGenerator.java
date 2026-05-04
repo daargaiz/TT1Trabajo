@@ -14,7 +14,8 @@ import java.util.List;
 @Service
 public class GridGenerator implements GridDataService {
     private static final int DEFAULT_LADO = 12;
-    private static final int DEFAULT_PASOS = 3;
+    // Con el estado inicial (t=0), DEFAULT_PASOS=18 produce 19 "etapas" (t=0..18).
+    private static final int DEFAULT_PASOS = 18;
 
     private final GestorToken gestorToken;
     private final TableroFactory tableroFactory;

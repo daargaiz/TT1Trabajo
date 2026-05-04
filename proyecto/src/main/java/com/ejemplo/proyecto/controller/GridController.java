@@ -23,7 +23,7 @@ public class GridController {
     @GetMapping(produces = MediaType.TEXT_PLAIN_VALUE)
     public String getGrid(
             @RequestParam String tok,
-            @RequestParam(defaultValue = "3") int steps
+            @RequestParam(defaultValue = "18") int steps
     ) {
         return this.gridDataService.generarTexto(tok, steps);
     }
@@ -31,7 +31,7 @@ public class GridController {
     @GetMapping(value = "/json", produces = MediaType.APPLICATION_JSON_VALUE)
     public GridResponse getGridJson(
             @RequestParam String tok,
-            @RequestParam(defaultValue = "3") int steps
+            @RequestParam(defaultValue = "18") int steps
     ) {
         Tablero tablero = this.gridDataService.generarTablero(tok, steps);
         return new GridResponse(tablero.getLado(), tablero.getHistorial());
