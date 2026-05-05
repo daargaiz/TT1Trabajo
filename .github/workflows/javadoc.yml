@@ -48,7 +48,7 @@ jobs:
       - name: Subir artefacto
         uses: actions/upload-pages-artifact@v3
         with:
-          path: proyecto/target/site/apidocs
+          path: proyecto/target/reports/apidocs
 
   deploy:
     needs: build-docs
