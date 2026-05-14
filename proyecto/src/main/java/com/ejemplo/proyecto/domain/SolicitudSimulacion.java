@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Recoge los datos necesarios para lanzar una simulación de un usuario.
+ * Valida los valores básicos y conserva las especificaciones como lista inmutable.
+ */
 public class SolicitudSimulacion {
     private final int token;
     private final String nombreUsuario;
@@ -11,6 +15,14 @@ public class SolicitudSimulacion {
     private final int pasos;
     private final List<EspecificacionEntidad> especificaciones;
 
+    /**
+     * Construye una solicitud de simulación completa.
+     * @param token Identificador generado para consultar la simulación.
+     * @param nombreUsuario Usuario que realiza la solicitud.
+     * @param ladoTablero Longitud del lado del tablero cuadrado.
+     * @param pasos Número de pasos que se ejecutarán.
+     * @param especificaciones Tipos de entidades y cantidades solicitadas.
+     */
     public SolicitudSimulacion(
             int token,
             String nombreUsuario,
@@ -61,6 +73,10 @@ public class SolicitudSimulacion {
         return especificaciones;
     }
 
+    /**
+     * Calcula el número total de entidades que deben colocarse en el tablero.
+     * @return Suma de las cantidades de todas las especificaciones.
+     */
     public int getTotalEntidadesSolicitadas() {
         return this.especificaciones.stream()
                 .mapToInt(EspecificacionEntidad::cantidad)

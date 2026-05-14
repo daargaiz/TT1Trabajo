@@ -1,5 +1,10 @@
 package com.ejemplo.proyecto.domain;
 
+/**
+ * Cantidad solicitada de un tipo concreto de entidad.
+ * @param tipo Tipo de entidad que se debe crear.
+ * @param cantidad Número de entidades de ese tipo.
+ */
 public record EspecificacionEntidad(TipoEntidad tipo, int cantidad) {
     public EspecificacionEntidad {
         if (tipo == null) {

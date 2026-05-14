@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.function.BiFunction;
 
+/**
+ * Define los tipos de entidades disponibles y cómo se construyen desde nombres externos.
+ */
 public enum TipoEntidad {
     QUIETA("quieta", List.of("quieta", "prueba1"), EntidadQuieta::new),
     MOVIL("movil", List.of("movil", "prueba2"), EntidadMovil::new),
@@ -28,10 +31,21 @@ public enum TipoEntidad {
         return nombreExterno;
     }
 
+    /**
+     * Crea una entidad del tipo indicado en las coordenadas recibidas.
+     * @param x Posición en el eje horizontal.
+     * @param y Posición en el eje vertical.
+     * @return Nueva entidad concreta del tipo seleccionado.
+     */
     public Entidad crearEntidad(int x, int y) {
         return this.factoria.apply(x, y);
     }
 
+    /**
+     * Convierte el nombre recibido desde la API al tipo interno de entidad.
+     * @param nombre Nombre o alias de la entidad.
+     * @return Tipo de entidad correspondiente.
+     */
     public static TipoEntidad desdeNombre(String nombre) {
         if (nombre == null || nombre.isBlank()) {
             throw new IllegalArgumentException("El nombre de entidad es obligatorio");

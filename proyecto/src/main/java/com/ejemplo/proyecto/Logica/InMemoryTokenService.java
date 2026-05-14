@@ -6,6 +6,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * Generador simple de tokens únicos en memoria.
+ */
 @Service
 public class InMemoryTokenService implements TokenService {
     private final AtomicInteger secuencia = new AtomicInteger(1000);
@@ -15,6 +18,10 @@ public class InMemoryTokenService implements TokenService {
         this.repository = repository;
     }
 
+    /**
+     * Genera el siguiente token disponible evitando duplicados ya guardados.
+     * @return Token entero único para la ejecución actual.
+     */
     @Override
     public int generarToken() {
         int token = this.secuencia.getAndIncrement();

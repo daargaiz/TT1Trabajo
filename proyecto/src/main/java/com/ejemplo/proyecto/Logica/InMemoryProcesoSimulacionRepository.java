@@ -10,6 +10,10 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * Repositorio en memoria para procesos de simulación.
+ * Usa usuario y token como clave lógica de consulta.
+ */
 @Repository
 public class InMemoryProcesoSimulacionRepository implements ProcesoSimulacionRepository {
     private final Map<String, ProcesoSimulacion> procesos = new ConcurrentHashMap<>();

@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+/**
+ * Controlador REST para crear y consultar solicitudes de simulación.
+ */
 @RestController
 @RequestMapping("/Solicitud")
 public class SolicitudController {
@@ -23,6 +26,12 @@ public class SolicitudController {
         this.solicitudSimulacionService = solicitudSimulacionService;
     }
 
+    /**
+     * Crea una nueva solicitud de simulación para el usuario indicado.
+     * @param nombreUsuario Usuario que solicita la simulación.
+     * @param request Entidades y cantidades iniciales.
+     * @return Token de la solicitud creada.
+     */
     @PostMapping(value = "/Solicitar", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<SolicitudResponse> solicitar(
             @RequestParam String nombreUsuario,
@@ -37,12 +46,23 @@ public class SolicitudController {
                 .body(new SolicitudResponse(true, proceso.getSolicitud().getToken(), null, true));
     }
 
+    /**
+     * Lista los tokens de solicitudes asociadas a un usuario.
+     * @param nombreUsuario Usuario consultado.
+     * @return Lista ordenada de tokens del usuario.
+     */
     @GetMapping(value = "/GetSolicitudesUsuario", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Integer>> getSolicitudesUsuario(@RequestParam String nombreUsuario) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(this.solicitudSimulacionService.listarTokensUsuario(nombreUsuario));
     }
 
+    /**
+     * Comprueba si una solicitud concreta pertenece al usuario y está completada.
+     * @param nombreUsuario Usuario consultado.
+     * @param token Token de la solicitud.
+     * @return Lista con el token si la solicitud existe y está terminada; vacía en caso contrario.
+     */
     @GetMapping(value = "/ComprobarSolicitud", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Integer>> comprobarSolicitud(
             @RequestParam String nombreUsuario,
@@ -54,6 +74,9 @@ public class SolicitudController {
         return ResponseEntity.status(HttpStatus.CREATED).body(respuesta);
     }
 
+    /**
+     * Cuerpo de creación de solicitud recibido desde la API.
+     */
     public static class SolicitudRequest {
         private List<Integer> cantidadesIniciales;
         private List<String> nombreEntidades;
@@ -75,6 +98,9 @@ public class SolicitudController {
         }
     }
 
+    /**
+     * Respuesta de creación de solicitud.
+     */
     public record SolicitudResponse(boolean done, int tokenSolicitud, String errorMessage, boolean data) {
     }
 }

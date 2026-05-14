@@ -69,8 +69,16 @@ public abstract class Entidad {
         return new EstadoEntidad(tiempo, this.abscisa, this.ordenada, getColor());
     }
 
+    /**
+     * Obtiene el nombre lógico del tipo de entidad.
+     * @return Tipo que se usa en la lógica y serialización.
+     */
     public abstract String getTipo();
 
+    /**
+     * Obtiene el color de representación de la entidad.
+     * @return Color asociado a este tipo de entidad.
+     */
     public abstract String getColor();
 
     /**
