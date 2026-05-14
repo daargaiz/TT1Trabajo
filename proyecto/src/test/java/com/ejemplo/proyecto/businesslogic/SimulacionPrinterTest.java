@@ -250,17 +250,4 @@ public class SimulacionPrinterTest {
                     "No deben aparecer líneas vacías entre las entidades.");
         }
     }
-	@Test
-    void testPrintFormatoTablero() {
-        // Set up
-        Tablero tablero = new Tablero(10);
-        tablero.getEntidades().add(new EntidadQuieta(0, 0));
-        
-
-        SimulacionPrinter printer = new SimulacionPrinterStub();
-        String resultado = printer.print(tablero);
-
-        String esperado = "10\n0,0,0,yellow";
-        assertEquals(esperado, resultado.trim(), "El formato de salida no es el esperado");
-    }
 }

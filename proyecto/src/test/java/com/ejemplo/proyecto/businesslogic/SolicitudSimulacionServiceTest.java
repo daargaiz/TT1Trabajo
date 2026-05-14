@@ -11,11 +11,14 @@ import com.ejemplo.proyecto.domain.ProcesoSimulacion;
 import com.ejemplo.proyecto.domain.TipoEntidad;
 import com.ejemplo.proyecto.persistence.SolicitudSimulacionService;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -129,5 +132,45 @@ class SolicitudSimulacionServiceTest {
 
         assertTrue(service.comprobarSolicitud("dani", proceso.getSolicitud().getToken()));
         assertFalse(service.comprobarSolicitud("dani", 9999));
+    }
+    
+    @Test
+    @DisplayName("solicitar: lanzar excepción si las listas de nombres y cantidades tienen distinto tamaño")
+    void testListasDescompensadas() {
+        // Si mandas 2 nombres pero solo 1 cantidad, el servicio debería fallar
+        assertThrows(IllegalArgumentException.class, () -> service.solicitar(
+                "juan",
+                List.of("movil", "quieta"),
+                List.of(1) // Falta la cantidad para 'quieta'
+        ));
+    }
+
+    @Test
+    @DisplayName("solicitar: verificar que el resultado formateado contiene la estructura correcta")
+    void testContenidoResultadoFormateado() {
+        ProcesoSimulacion proceso = service.solicitar(
+                "juan",
+                List.of("movil"),
+                List.of(1)
+        );
+        
+        String resultado = proceso.getResultadoFormateado();
+        
+        // Verificamos que contenga los elementos del contrato (tiempo,y,x,color)
+        assertAll(
+            () -> assertTrue(resultado.contains("red"), "Debe contener el color de la entidad móvil"),
+            () -> assertTrue(resultado.lines().count() > 1, "Debe tener al menos la cabecera y una entidad")
+        );
+    }
+
+    @Test
+    @DisplayName("consultar: no debe devolver nada si el usuario no coincide con el token")
+    void testUsuarioNoCoincideConToken() {
+        ProcesoSimulacion creado = service.solicitar("juan", List.of("quieta"), List.of(1));
+        
+        // Intentamos consultar el token de 'juan' usando el usuario 'pedro'
+        Optional<ProcesoSimulacion> resultado = service.consultar("pedro", creado.getSolicitud().getToken());
+        
+        assertTrue(resultado.isEmpty(), "No debe permitir ver simulaciones de otros usuarios");
     }
 }

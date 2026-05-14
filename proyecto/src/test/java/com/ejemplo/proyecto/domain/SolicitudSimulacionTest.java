@@ -79,4 +79,32 @@ class SolicitudSimulacionTest {
                 List.of()
         ));
     }
+    
+    @Test
+    void testInmutabilidadLista() {
+        SolicitudSimulacion solicitud = solicitudValida();
+        List<EspecificacionEntidad> especificaciones = solicitud.getEspecificaciones();
+        
+        assertThrows(UnsupportedOperationException.class, () -> 
+            especificaciones.add(new EspecificacionEntidad(TipoEntidad.QUIETA, 1))
+        );
+    }
+    
+    @Test
+    void testTrimNombreUsuario() {
+        SolicitudSimulacion solicitud = new SolicitudSimulacion(1, "  juan  ", 10, 1, 
+            List.of(new EspecificacionEntidad(TipoEntidad.MOVIL, 1)));
+        
+        assertEquals("juan", solicitud.getNombreUsuario(), "Debe aplicar trim() al nombre");
+    }
+    
+    private SolicitudSimulacion solicitudValida() {
+        return new SolicitudSimulacion(
+                1000,
+                "juan",
+                12,
+                3,
+                List.of(new EspecificacionEntidad(TipoEntidad.MOVIL, 1))
+        );
+    }
 }
