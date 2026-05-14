@@ -12,9 +12,18 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * Construye tableros iniciales colocando entidades en posiciones aleatorias reproducibles.
+ */
 @Component
 public class TableroFactory {
 
+    /**
+     * Crea el tablero inicial para una solicitud concreta.
+     * @param solicitud Solicitud con tamaño, entidades y cantidades.
+     * @param semilla Semilla que determina el orden de colocación.
+     * @return Tablero inicial con todas las entidades colocadas.
+     */
     public Tablero crear(SolicitudSimulacion solicitud, long semilla) {
         if (solicitud.getTotalEntidadesSolicitadas() > solicitud.getLadoTablero() * solicitud.getLadoTablero()) {
             throw new IllegalArgumentException("No caben tantas entidades en el tablero solicitado");
@@ -36,6 +45,9 @@ public class TableroFactory {
         return tablero;
     }
 
+    /**
+     * Genera todas las posiciones disponibles del tablero antes de mezclarlas.
+     */
     private List<Posicion> crearPosicionesDisponibles(int lado) {
         List<Posicion> posiciones = new ArrayList<>(lado * lado);
         for (int y = 0; y < lado; y++) {

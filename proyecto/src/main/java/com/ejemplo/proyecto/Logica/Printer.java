@@ -7,9 +7,17 @@ import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
 
+/**
+ * Convierte un tablero en una representación de texto legible.
+ */
 @Service
 public class Printer implements SimulacionPrinter {
 
+    /**
+     * Imprime dimensiones, entidades e historial del tablero.
+     * @param tablero Tablero que se quiere representar.
+     * @return Texto con el estado de la simulación.
+     */
     @Override
     public String print(Tablero tablero) {
         tablero.registrarEstadoInicialSiNecesario();

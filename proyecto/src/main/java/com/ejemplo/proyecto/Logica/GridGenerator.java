@@ -11,6 +11,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * Genera tableros y salidas de texto para la API de grid de demostración.
+ */
 @Service
 public class GridGenerator implements GridDataService {
     private static final int DEFAULT_LADO = 12;
@@ -34,21 +37,43 @@ public class GridGenerator implements GridDataService {
         this.simulacionServiceFactory = simulacionServiceFactory;
     }
 
+    /**
+     * Genera el texto de la simulación usando el número de pasos por defecto.
+     * @param token Token usado como base de la semilla.
+     * @return Representación textual del tablero simulado.
+     */
     @Override
     public String generarTexto(String token) {
         return generarTexto(token, DEFAULT_PASOS);
     }
 
+    /**
+     * Genera el texto de la simulación con el número de pasos indicado.
+     * @param token Token usado como base de la semilla.
+     * @param pasos Número de pasos a ejecutar.
+     * @return Representación textual del tablero simulado.
+     */
     @Override
     public String generarTexto(String token, int pasos) {
         return this.printer.print(generarTablero(token, pasos));
     }
 
+    /**
+     * Genera un tablero usando el número de pasos por defecto.
+     * @param token Token usado como base de la semilla.
+     * @return Tablero simulado.
+     */
     @Override
     public Tablero generarTablero(String token) {
         return generarTablero(token, DEFAULT_PASOS);
     }
 
+    /**
+     * Genera un tablero determinista a partir del token recibido.
+     * @param token Token usado como base de la semilla.
+     * @param pasos Número de pasos a ejecutar.
+     * @return Tablero con su historial calculado.
+     */
     @Override
     public Tablero generarTablero(String token, int pasos) {
         if (pasos < 0) {

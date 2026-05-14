@@ -28,7 +28,17 @@ public class Tablero {
      * @return Valor del lado.
      */
     public int getLado() { return lado; }
+
+    /**
+     * Obtiene el ancho del tablero.
+     * @return Mismo valor que el lado, al ser un tablero cuadrado.
+     */
     public int getAncho() { return lado; }
+
+    /**
+     * Obtiene la altura del tablero.
+     * @return Mismo valor que el lado, al ser un tablero cuadrado.
+     */
     public int getAltura() { return lado; }
     
     /**
@@ -51,10 +61,19 @@ public class Tablero {
         this.entidades = entidades == null ? new ArrayList<>() : new ArrayList<>(entidades);
     }
 
+    /**
+     * Obtiene el historial de estados registrados durante la simulación.
+     * @return Lista no modificable con las instantáneas de las entidades.
+     */
     public List<EstadoEntidad> getHistorial() {
         return Collections.unmodifiableList(historial);
     }
 
+    /**
+     * Comprueba si una posición pertenece al tablero.
+     * @param posicion Posición que se quiere validar.
+     * @return true si la posición está dentro de los límites del tablero.
+     */
     public boolean estaDentro(Posicion posicion) {
         return posicion.x() >= 0
                 && posicion.y() >= 0
@@ -62,12 +81,19 @@ public class Tablero {
                 && posicion.y() < this.lado;
     }
 
+    /**
+     * Registra el estado inicial solo si todavía no hay historial.
+     */
     public void registrarEstadoInicialSiNecesario() {
         if (this.historial.isEmpty()) {
             registrarInstantanea(0);
         }
     }
 
+    /**
+     * Añade al historial el estado de todas las entidades en el instante indicado.
+     * @param tiempo Instante asociado a la instantánea.
+     */
     public void registrarInstantanea(int tiempo) {
         for (Entidad entidad : this.entidades) {
             this.historial.add(entidad.registrarEstado(tiempo));

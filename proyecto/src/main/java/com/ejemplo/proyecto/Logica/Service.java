@@ -16,6 +16,10 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
+/**
+ * Servicio principal de simulación.
+ * Aplica el movimiento de entidades móviles y la expansión de entidades víricas paso a paso.
+ */
 public class Service implements SimulacionService {
     private static final List<Posicion> DESPLAZAMIENTOS = List.of(
             new Posicion(1, 0),
@@ -25,14 +29,25 @@ public class Service implements SimulacionService {
     );
     private final Random random;
 
+    /**
+     * Crea el servicio con una semilla fija para obtener simulaciones repetibles por defecto.
+     */
     public Service() {
         this(new Random(0L));
     }
 
+    /**
+     * Crea el servicio con el generador aleatorio indicado.
+     * @param random Generador usado para escoger movimientos y expansiones.
+     */
     public Service(Random random) {
         this.random = random;
     }
 
+    /**
+     * Ejecuta un único instante de la simulación sobre el tablero recibido.
+     * @param tablero Tablero que se actualiza con el nuevo estado.
+     */
     @Override
     public void nextStep(Tablero tablero) {
         tablero.registrarEstadoInicialSiNecesario();
@@ -61,6 +76,12 @@ public class Service implements SimulacionService {
         tablero.registrarInstantanea(calcularSiguienteTiempo(tablero));
     }
 
+    /**
+     * Ejecuta varios pasos de simulación sobre el tablero recibido.
+     * @param tablero Tablero inicial que se va actualizando.
+     * @param steps Número de pasos a ejecutar.
+     * @return Simulación con el tablero resultante.
+     */
     @Override
     public Simulacion ejecutarSimulacion(Tablero tablero, int steps) {
         if (steps < 0) {
@@ -74,6 +95,9 @@ public class Service implements SimulacionService {
         return new Simulacion(List.of(tablero));
     }
 
+    /**
+     * Resuelve el desplazamiento de una entidad móvil evitando posiciones ocupadas.
+     */
     private void resolverMovimiento(
             Tablero tablero,
             EntidadMovil entidad,
@@ -92,6 +116,9 @@ public class Service implements SimulacionService {
         ocupadasAlFinal.add(destino);
     }
 
+    /**
+     * Resuelve la posible duplicación de una entidad vírica en una celda libre.
+     */
     private void resolverExpansionVirica(
             Tablero tablero,
             EntidadVirica entidad,
@@ -117,6 +144,9 @@ public class Service implements SimulacionService {
         ocupadasAlFinal.add(destino);
     }
 
+    /**
+     * Busca una posición adyacente libre dentro del tablero.
+     */
     private Posicion buscarDestinoLibre(
             Tablero tablero,
             Posicion origen,

@@ -19,6 +19,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * Coordina la creación, ejecución y consulta de solicitudes de simulación.
+ */
 @Service
 public class ServicioSolicitudesSimulacion implements SolicitudSimulacionService {
     private static final int DEFAULT_LADO = 12;
@@ -102,6 +105,10 @@ public class ServicioSolicitudesSimulacion implements SolicitudSimulacionService
                 .orElse(false);
     }
 
+    /**
+     * Normaliza los nombres y cantidades recibidos desde la API.
+     * Agrupa cantidades repetidas por tipo de entidad y descarta entradas con cantidad cero.
+     */
     private List<EspecificacionEntidad> normalizarSolicitud(
             List<String> nombresEntidades,
             List<Integer> cantidadesIniciales
@@ -142,6 +149,9 @@ public class ServicioSolicitudesSimulacion implements SolicitudSimulacionService
         return especificaciones;
     }
 
+    /**
+     * Valida que el usuario recibido pueda usarse para crear o consultar solicitudes.
+     */
     private void validarNombreUsuario(String nombreUsuario) {
         if (nombreUsuario == null || nombreUsuario.isBlank()) {
             throw new IllegalArgumentException("El nombre de usuario es obligatorio");
