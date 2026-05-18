@@ -2,6 +2,8 @@
 
 - El usuario modifica el tamaño del tablero.
 - Cambiar el número de pasos.
+- Modificar los colores de las entidades.
+- Acceso a usuarios con discapacidades.
 - Proporcionar tests de RabbitMQ.
 - Implementar la mortandad de criaturas.
 - Manual de usuario para el RabbitMQ.
