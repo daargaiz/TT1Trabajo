@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Welcome</title>
+</head>
+<body>
+    <div th:if="${errors != null and !errors.isEmpty()}">
+        <h1>Se han encontrado errores</h1>
+        <ul>
+            <li th:each="error : ${errors}" th:text="${error}"></li>
+        </ul>
+    </div>
+    <div th:if="${token != null}">
+        <p>Su solicitud se ha realizado. Puede descargar los resultados cuando esten disponibles con el siguiente token:</p>
+        <h1 th:text="${token}"></h1>
+    </div>
+</body>
+</html>
