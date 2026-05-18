@@ -5,7 +5,7 @@
 ![Build](https://img.shields.io/badge/build-8884-green)
 ![Número de la suerte](https://img.shields.io/badge/suerte-69-orange)
 
-> [!IMPORTANTE]
+> [!IMPORTANT]
 > El código de este repositorio se proporciona tal cual, sin garantías de ningún tipo.
 > Los autores no se responsabilizan de ningún daño directo o indirecto que pueda derivarse
 > de su uso, incluyendo pérdida de datos, fallos del sistema o cualquier otro perjuicio.
