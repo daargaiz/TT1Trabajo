@@ -35,14 +35,14 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
 
       - name: Generar Javadoc
-        working-directory: proyecto
+        working-directory: 'Código/Trabajo grupal'
         run: mvn javadoc:javadoc
         
       - name: Build, Test y Analizar con Sonar
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        working-directory: proyecto
+        working-directory: 'Código/Trabajo grupal'
         run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=TT1Trabajo -Dsonar.organization=daargaiz -Dsonar.java.binaries=target/classes -Dsonar.coverage.jacoco.xmlReportPaths=target/reports/jacoco/jacoco.xml
 
       - name: Subir artefacto
