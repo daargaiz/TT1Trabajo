@@ -1,0 +1,8 @@
+com.ejemplo.proyecto
+com.ejemplo.proyecto.businesslogic.actions
+com.ejemplo.proyecto.businesslogic.printer
+com.ejemplo.proyecto.controller
+com.ejemplo.proyecto.domain
+com.ejemplo.proyecto.Logica
+com.ejemplo.proyecto.persistence
+com.ejemplo.proyecto.rabbit
