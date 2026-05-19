@@ -10,4 +10,12 @@ public interface SolicitudSimulacionPublisher {
      * @param token Token de la solicitud.
      */
     void publicar(String nombreUsuario, int token);
+
+    /**
+     * Indica si el procesamiento queda delegado a un consumidor externo.
+     * @return true si el publicador activa un flujo asíncrono real.
+     */
+    default boolean isAsincrono() {
+        return false;
+    }
 }

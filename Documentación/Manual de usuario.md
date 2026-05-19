@@ -22,6 +22,7 @@ Expone una API que permite controlar la posición y el comportamiento de element
 - **Java 17** o superior → [Descargar Java 17](https://adoptium.net/es/temurin/releases/?version=17)
 - **Maven** → [Descargar Maven](https://maven.apache.org/download.cgi)
 - Spring Boot → [Guía de instalación](https://spring.io/projects/spring-boot)
+- Docker y Docker Compose para usar RabbitMQ → [Instalar Docker](https://www.docker.com/)
 
 ## Cómo Ejecutar
 
@@ -41,6 +42,52 @@ Expone una API que permite controlar la posición y el comportamiento de element
    mvnw.cmd spring-boot:run
    ```
 4. El servicio estará disponible en ``http://localhost:8080`` (puedes configurar otro puerto en application.properties). 
+
+## Uso de RabbitMQ
+
+El backend usa RabbitMQ para gestionar las solicitudes de simulación de forma asíncrona. Cuando el cliente crea una solicitud, el backend guarda el proceso como pendiente, envía un mensaje a la cola `solicitudes.simulacion` y un consumidor interno procesa la simulación.
+
+1. Desde la raíz del repositorio, levanta RabbitMQ:
+   ```bash
+   docker compose up -d rabbitmq
+   ```
+2. Comprueba que el contenedor está activo:
+   ```bash
+   docker compose ps
+   ```
+3. Abre la interfaz de administración de RabbitMQ:
+   ```
+   http://localhost:15672
+   ```
+   Usuario: `guest`  
+   Contraseña: `guest`
+4. Arranca el backend grupal:
+   ```bash
+   cd "Código/Trabajo grupal"
+   ./mvnw spring-boot:run
+   ```
+5. Envía una solicitud de prueba:
+   ```bash
+   curl -i -X POST 'http://localhost:8080/Solicitud/Solicitar?nombreUsuario=dani' \
+     -H 'Content-Type: application/json' \
+     --data '{"nombreEntidades":["Prueba1","Prueba2","Prueba3"],"cantidadesIniciales":[1,2,1]}'
+   ```
+6. Consulta el resultado usando el token recibido:
+   ```bash
+   curl -i -X POST 'http://localhost:8080/Resultados?nombreUsuario=dani&tok=1000'
+   ```
+
+Si se usa el trabajo individual como cliente, su propiedad debe apuntar al backend grupal:
+
+```properties
+servicio.consumible.base-url=http://localhost:8080
+```
+
+Para parar RabbitMQ:
+
+```bash
+docker compose down
+```
 
 ## Interacción con el Cliente
 

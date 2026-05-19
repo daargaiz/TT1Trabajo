@@ -12,6 +12,7 @@ import com.ejemplo.proyecto.persistence.SolicitudSimulacionProcessor;
 import com.ejemplo.proyecto.persistence.SolicitudSimulacionService;
 import com.ejemplo.proyecto.persistence.SolicitudSimulacionPublisher;
 import com.ejemplo.proyecto.persistence.TokenService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -37,6 +38,29 @@ public class ServicioSolicitudesSimulacion implements SolicitudSimulacionService
     private final ProcesoSimulacionRepository repository;
     private final TokenService tokenService;
     private final SolicitudSimulacionPublisher solicitudSimulacionPublisher;
+    private final boolean procesamientoSincrono;
+
+    @Autowired
+    public ServicioSolicitudesSimulacion(
+            GestorToken gestorToken,
+            TableroFactory tableroFactory,
+            SimulacionPrinter printer,
+            SimulacionServiceFactory simulacionServiceFactory,
+            ProcesoSimulacionRepository repository,
+            TokenService tokenService
+    ) {
+        this(
+                gestorToken,
+                tableroFactory,
+                printer,
+                simulacionServiceFactory,
+                repository,
+                tokenService,
+                (nombreUsuario, token) -> {
+                },
+                true
+        );
+    }
 
     public ServicioSolicitudesSimulacion(
             GestorToken gestorToken,
@@ -47,6 +71,28 @@ public class ServicioSolicitudesSimulacion implements SolicitudSimulacionService
             TokenService tokenService,
             SolicitudSimulacionPublisher solicitudSimulacionPublisher
     ) {
+        this(
+                gestorToken,
+                tableroFactory,
+                printer,
+                simulacionServiceFactory,
+                repository,
+                tokenService,
+                solicitudSimulacionPublisher,
+                !solicitudSimulacionPublisher.isAsincrono()
+        );
+    }
+
+    private ServicioSolicitudesSimulacion(
+            GestorToken gestorToken,
+            TableroFactory tableroFactory,
+            SimulacionPrinter printer,
+            SimulacionServiceFactory simulacionServiceFactory,
+            ProcesoSimulacionRepository repository,
+            TokenService tokenService,
+            SolicitudSimulacionPublisher solicitudSimulacionPublisher,
+            boolean procesamientoSincrono
+    ) {
         this.gestorToken = gestorToken;
         this.tableroFactory = tableroFactory;
         this.printer = printer;
@@ -54,6 +100,7 @@ public class ServicioSolicitudesSimulacion implements SolicitudSimulacionService
         this.repository = repository;
         this.tokenService = tokenService;
         this.solicitudSimulacionPublisher = solicitudSimulacionPublisher;
+        this.procesamientoSincrono = procesamientoSincrono;
     }
 
     @Override
@@ -76,6 +123,9 @@ public class ServicioSolicitudesSimulacion implements SolicitudSimulacionService
         ProcesoSimulacion proceso = new ProcesoSimulacion(solicitud);
         this.repository.guardar(proceso);
         this.solicitudSimulacionPublisher.publicar(solicitud.getNombreUsuario(), token);
+        if (this.procesamientoSincrono) {
+            procesar(solicitud.getNombreUsuario(), token);
+        }
         return proceso;
     }
 

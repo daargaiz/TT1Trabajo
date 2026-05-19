@@ -26,4 +26,9 @@ public class SolicitudSimulacionProducer implements SolicitudSimulacionPublisher
     public void publicar(String nombreUsuario, int token) {
         enviar(new SolicitudSimulacionMessage(nombreUsuario, token));
     }
+
+    @Override
+    public boolean isAsincrono() {
+        return true;
+    }
 }
