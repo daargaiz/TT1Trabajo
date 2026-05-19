@@ -30,7 +30,9 @@ class CompatibilidadServicioControllerTest {
                 new Printer(),
                 semilla -> new com.ejemplo.proyecto.Logica.Service(new java.util.Random(semilla)),
                 repository,
-                new InMemoryTokenService(repository)
+                new InMemoryTokenService(repository),
+                (nombreUsuario, token) -> {
+                }
         );
 
         this.mockMvc = MockMvcBuilders.standaloneSetup(
