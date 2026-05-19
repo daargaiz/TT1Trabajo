@@ -8,7 +8,9 @@ import com.ejemplo.proyecto.domain.TipoEntidad;
 import com.ejemplo.proyecto.persistence.ProcesoSimulacionRepository;
 import com.ejemplo.proyecto.persistence.SimulacionPrinter;
 import com.ejemplo.proyecto.persistence.SimulacionServiceFactory;
+import com.ejemplo.proyecto.persistence.SolicitudSimulacionProcessor;
 import com.ejemplo.proyecto.persistence.SolicitudSimulacionService;
+import com.ejemplo.proyecto.persistence.SolicitudSimulacionPublisher;
 import com.ejemplo.proyecto.persistence.TokenService;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +25,7 @@ import java.util.Optional;
  * Coordina la creación, ejecución y consulta de solicitudes de simulación.
  */
 @Service
-public class ServicioSolicitudesSimulacion implements SolicitudSimulacionService {
+public class ServicioSolicitudesSimulacion implements SolicitudSimulacionService, SolicitudSimulacionProcessor {
     private static final int DEFAULT_LADO = 12;
     // Con el estado inicial (t=0), DEFAULT_PASOS=18 produce 19 "etapas" (t=0..18).
     private static final int DEFAULT_PASOS = 18;
@@ -34,6 +36,7 @@ public class ServicioSolicitudesSimulacion implements SolicitudSimulacionService
     private final SimulacionServiceFactory simulacionServiceFactory;
     private final ProcesoSimulacionRepository repository;
     private final TokenService tokenService;
+    private final SolicitudSimulacionPublisher solicitudSimulacionPublisher;
 
     public ServicioSolicitudesSimulacion(
             GestorToken gestorToken,
@@ -41,7 +44,8 @@ public class ServicioSolicitudesSimulacion implements SolicitudSimulacionService
             SimulacionPrinter printer,
             SimulacionServiceFactory simulacionServiceFactory,
             ProcesoSimulacionRepository repository,
-            TokenService tokenService
+            TokenService tokenService,
+            SolicitudSimulacionPublisher solicitudSimulacionPublisher
     ) {
         this.gestorToken = gestorToken;
         this.tableroFactory = tableroFactory;
@@ -49,6 +53,7 @@ public class ServicioSolicitudesSimulacion implements SolicitudSimulacionService
         this.simulacionServiceFactory = simulacionServiceFactory;
         this.repository = repository;
         this.tokenService = tokenService;
+        this.solicitudSimulacionPublisher = solicitudSimulacionPublisher;
     }
 
     @Override
@@ -70,13 +75,29 @@ public class ServicioSolicitudesSimulacion implements SolicitudSimulacionService
 
         ProcesoSimulacion proceso = new ProcesoSimulacion(solicitud);
         this.repository.guardar(proceso);
+        this.solicitudSimulacionPublisher.publicar(solicitud.getNombreUsuario(), token);
+        return proceso;
+    }
 
-        long semilla = this.gestorToken.generarSemilla(nombreUsuario.trim() + ":" + token);
+    @Override
+    public void procesar(String nombreUsuario, int token) {
+        validarNombreUsuario(nombreUsuario);
+        if (token < 0) {
+            throw new IllegalArgumentException("El token no puede ser negativo");
+        }
+
+        ProcesoSimulacion proceso = this.repository.buscarPorUsuarioYToken(nombreUsuario, token)
+                .orElseThrow(() -> new IllegalArgumentException("Solicitud no encontrada"));
+        if (proceso.isDone()) {
+            return;
+        }
+
+        SolicitudSimulacion solicitud = proceso.getSolicitud();
+        long semilla = this.gestorToken.generarSemilla(solicitud.getNombreUsuario().trim() + ":" + token);
         Tablero tablero = this.tableroFactory.crear(solicitud, semilla);
         this.simulacionServiceFactory.crear(semilla).ejecutarSimulacion(tablero, solicitud.getPasos());
         proceso.completar(tablero, this.printer.print(tablero));
         this.repository.guardar(proceso);
-        return proceso;
     }
 
     @Override
