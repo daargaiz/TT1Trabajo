@@ -10,7 +10,7 @@ Algunas mejoras o cosas que nos hubiera gustado implementar si hubiésemos tenid
 - [ ] **Separar API y worker RabbitMQ**
 - [ ] **Gestión de errores en RabbitMQ**
 - [ ] **Implementar la mortandad de criaturas**
-- [ ] **Añadir un sistema de tiempo de vida y alimentación**
+- [ ] **Añadir un sistema de alimentación**
 - [ ] **Adaptar la funcionalidad para todo trabajo individual**
 - [ ] **Mejorar el mantenimiento del código**
 - [ ] **Reducir el tamaño del Docker y hacerlo rootless para evitar acceso fuera del contenedor**
